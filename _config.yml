@@ -18,34 +18,34 @@ timezone:
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: Chirpy # the main title
+title: Toasty Tech Tales # the main title
 
-tagline: A text-focused Jekyll theme # it will display as the sub-title
+tagline: Crafting Code, Building Dreams. Follow the Crumbs at toastin.it! # it will display as the sub-title
 
 description: >- # used by seo meta and the atom feed
-  A minimal, responsive and feature-rich Jekyll theme for technical writing.
+  Join me at toastin.it, where I blend the art of software architecture with a dash of crispy code and a sprinkle of toasty tech tales!
 
 # fill in the protocol & hostname for your site, e.g., 'https://username.github.io'
-url: ""
+url: "https://toastin.it"
 
 github:
-  username: github_username # change to your github username
+  username: AlTosterino # change to your github username
 
 twitter:
-  username: twitter_username # change to your twitter username
+  username: AlTosterino # change to your twitter username
 
 social:
   # Change to your full name.
   # It will be displayed as the default author of the posts and the copyright owner in the Footer
-  name: your_full_name
-  email: example@domain.com # change to your email address
+  name: Daniel Różycki
+  email: altosterino@gmail.com # change to your email address
   links:
     # The first element serves as the copyright owner's link
-    - https://twitter.com/username # change to your twitter homepage
-    - https://github.com/username # change to your github homepage
+    - https://twitter.com/altosterino # change to your twitter homepage
+    - https://github.com/altosterino # change to your github homepage
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
-    # - https://www.linkedin.com/in/username
+    - https://www.linkedin.com/in/daniel-rozycki/
 
 google_site_verification: # fill in to your verification string
 
@@ -130,6 +130,9 @@ kramdown:
     block:
       line_numbers: true
       start_line: 1
+
+#kramdown:
+#  syntax_highlighter: coderay
 
 collections:
   tabs:
