@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleList from '../../components/ArticleList.astro';
+import { getArticles } from '../../lib/content';
+const articles = await getArticles();
+---
+
+<BaseLayout title="Articles — toastin.it" description="Technical writing by Daniel Różycki."
+  ><div class="wrap page-intro">
+    <p class="eyebrow">Archive</p><h1>Articles</h1><p class="lead">
+      Notes on building dependable systems and the engineering work around them.
+    </p><ArticleList articles={articles} empty="There are no public articles yet." />
+  </div></BaseLayout
+>

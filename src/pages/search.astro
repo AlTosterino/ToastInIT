@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getArticles } from '../lib/content';
+const articles = await getArticles();
+const searchData = articles.map((article) => ({
+  title: article.data.title,
+  description: article.data.description,
+  url: `/articles/${article.id}/`,
+  tags: article.data.tags,
+}));
+---
+
+<BaseLayout title="Search — toastin.it"
+  ><div class="wrap page-intro">
+    <p class="eyebrow">Find a note</p><h1>Search</h1><div id="search" class="search-box"></div>
+  </div></BaseLayout
+>
+<script is:inline id="search-data" type="application/json" set:html={JSON.stringify(searchData)} />
+<script>
+  const root = document.querySelector('#search');
+  if (root) {
+    type SearchItem = { title: string; description: string; url: string; tags?: string[] };
+    type PagefindResult = {
+      data: () => Promise<{ url: string; excerpt: string; meta: { title?: string } }>;
+    };
+    type PagefindSearch = (term: string) => Promise<{ results: PagefindResult[] }>;
+    const input = document.createElement('input');
+    input.type = 'search';
+    input.placeholder = 'Search articles…';
+    input.setAttribute('aria-label', 'Search articles');
+    root.append(input);
+    const results = document.createElement('div');
+    results.className = 'search-results';
+    root.append(results);
+    const localArticles = JSON.parse(
+      document.querySelector('#search-data')?.textContent ?? '[]',
+    ) as SearchItem[];
+    const renderResults = (items: SearchItem[]) => {
+      results.replaceChildren();
+      for (const item of items.slice(0, 10)) {
+        const link = document.createElement('a');
+        link.href = item.url;
+        const title = document.createElement('strong');
+        title.textContent = item.title;
+        const description = document.createElement('span');
+        description.textContent = item.description;
+        link.append(title, description);
+        results.append(link);
+      }
+    };
+    let pagefindSearch: PagefindSearch | undefined;
+    const loadPagefind = new Function('path', 'return import(path)') as (path: string) => Promise<{
+      search: (term: string) => Promise<{
+        results: Array<{
+          data: () => Promise<{ url: string; excerpt: string; meta: { title?: string } }>;
+        }>;
+      }>;
+    }>;
+    loadPagefind('/pagefind/pagefind.js')
+      .then(({ search }) => {
+        pagefindSearch = search;
+      })
+      .catch(() => {});
+    input.addEventListener('input', async () => {
+      const query = input.value.trim();
+      if (!query) {
+        results.replaceChildren();
+        return;
+      }
+      if (pagefindSearch) {
+        const response = await pagefindSearch(query);
+        renderResults(
+          await Promise.all(
+            response.results.slice(0, 10).map(async (result) => {
+              const data = await result.data();
+              return {
+                title: data.meta.title ?? 'Article',
+                description: data.excerpt,
+                url: data.url,
+              };
+            }),
+          ),
+        );
+        return;
+      }
+      const normalized = query.toLowerCase();
+      renderResults(
+        localArticles.filter((article) =>
+          `${article.title} ${article.description} ${(article.tags ?? []).join(' ')}`
+            .toLowerCase()
+            .includes(normalized),
+        ),
+      );
+    });
+    input.focus();
+  }
+</script>

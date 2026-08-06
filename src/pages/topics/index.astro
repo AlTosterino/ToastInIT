@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getArticles } from '../../lib/content';
+const articles = await getArticles();
+const topics = [...new Set(articles.flatMap((article) => article.data.tags))].sort();
+---
+
+<BaseLayout title="Topics — toastin.it" description="Topics covered on toastin.it."
+  ><div class="wrap page-intro">
+    <p class="eyebrow">Browse by subject</p><h1>Topics</h1><div class="topic-directory">
+      {
+        topics.length ? (
+          topics.map((topic) => (
+            <a href={`/topics/${topic.toLowerCase().replaceAll(' ', '-')}/`}>
+              <>
+                <span>{topic}</span>
+                <small>
+                  {articles.filter((article) => article.data.tags.includes(topic)).length}
+                </small>
+              </>
+            </a>
+          ))
+        ) : (
+          <p class="empty-state">Topics will appear here with the first public article.</p>
+        )
+      }
+    </div>
+  </div></BaseLayout
+>
