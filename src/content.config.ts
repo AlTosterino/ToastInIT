@@ -17,6 +17,7 @@ const articles = defineCollection({
     repository: z.url().optional(),
     canonicalUrl: z.url().optional(),
     ogImage: z.string().optional(),
+    noindex: z.boolean().default(false),
     language: z.string().default('en'),
   }),
 });

@@ -4,11 +4,11 @@
 
 <header class="site-header">
   <div class="wrap header-inner">
-    <a class="wordmark" href="/" aria-label="toastin.it home">toastin.it</a>
+    <a class="wordmark" href="/" aria-label="Daniel Różycki notes home"
+      >Daniel Różycki <span>/ Notes</span></a
+    >
     <nav class="desktop-nav" aria-label="Primary navigation">
-      <a href="/articles">Articles</a><a href="/series">Series</a><a href="/topics">Topics</a><a
-        href="/about">About</a
-      >
+      <a href="/articles">Writing</a><a href="/topics">Topics</a><a href="/about">About</a>
     </nav>
     <div class="header-actions">
       <a class="icon-button" href="/search" aria-label="Search (⌘K)"
@@ -16,7 +16,7 @@
           ><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 5 5"></path></svg
         ></a
       >
-      <button class="icon-button" type="button" data-theme-toggle aria-label="Toggle color theme"
+      <button class="icon-button" type="button" data-theme-toggle aria-label="Switch to dark theme"
         ><span aria-hidden="true">◐</span></button
       >
       <button
@@ -30,23 +30,32 @@
     </div>
   </div>
   <nav id="mobile-nav" class="mobile-nav wrap" aria-label="Mobile navigation" hidden>
-    <a href="/articles">Articles</a><a href="/series">Series</a><a href="/topics">Topics</a><a
-      href="/about">About</a
-    >
+    <a href="/articles">Writing</a><a href="/topics">Topics</a><a href="/about">About</a>
   </nav>
 </header>
 <script>
   const root = document.documentElement;
-  document.querySelector('[data-theme-toggle]')?.addEventListener('click', () => {
-    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
-    root.dataset.theme = next;
+  const themeToggle = document.querySelector('[data-theme-toggle]');
+  const updateThemeLabel = () =>
+    themeToggle?.setAttribute(
+      'aria-label',
+      `Switch to ${root.dataset.uiTheme === 'dark' ? 'light' : 'dark'} theme`,
+    );
+  updateThemeLabel();
+  themeToggle?.addEventListener('click', () => {
+    const next = root.dataset.uiTheme === 'dark' ? 'light' : 'dark';
+    root.dataset.uiTheme = next;
+    root.dataset.theme = next === 'dark' ? 'github-dark-default' : 'github-light-default';
     localStorage.setItem('theme', next);
+    window.dispatchEvent(new CustomEvent('themechange', { detail: { theme: next } }));
+    updateThemeLabel();
   });
   const menu = document.querySelector('[data-menu-toggle]');
   const nav = document.querySelector('#mobile-nav');
   menu?.addEventListener('click', () => {
     const open = menu.getAttribute('aria-expanded') === 'true';
     menu.setAttribute('aria-expanded', String(!open));
+    menu.setAttribute('aria-label', open ? 'Open menu' : 'Close menu');
     nav?.toggleAttribute('hidden', open);
   });
   document.addEventListener('keydown', (event) => {

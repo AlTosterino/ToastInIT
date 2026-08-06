@@ -15,7 +15,7 @@ export default defineConfig({
       styleOverrides: { codeFontFamily: 'var(--font-mono)', codeFontSize: '0.875rem' },
     }),
     mdx(),
-    sitemap(),
+    sitemap({ filter: (page) => !page.endsWith('/search/') }),
   ],
   markdown: {
     shikiConfig: { themes: { light: 'github-light-default', dark: 'github-dark-default' } },

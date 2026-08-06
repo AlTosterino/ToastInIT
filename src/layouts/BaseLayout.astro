@@ -1,56 +1,62 @@
 ---
 import Header from '../components/Header.astro';
 import '../styles/global.css';
+import { absoluteUrl, defaultDescription, ogImage, personJsonLd, websiteJsonLd } from '../lib/site';
 const {
   title = 'Daniel Różycki — Software Architecture, Python & AI Engineering',
-  description = 'Software architecture, Python, distributed systems and AI engineering.',
+  description = defaultDescription,
   canonical,
   type = 'website',
   publishedAt,
+  updatedAt,
+  language = 'en',
+  noindex = false,
+  image = '/og/home.png',
+  jsonLd = [],
 } = Astro.props;
-const url = canonical ?? Astro.url.href;
+const url = absoluteUrl(canonical ?? Astro.url.pathname);
+const graph = [websiteJsonLd, personJsonLd, ...(Array.isArray(jsonLd) ? jsonLd : [jsonLd])];
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={language}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
     <link rel="canonical" href={url} />
+    {noindex && <meta name="robots" content="noindex,follow" />}
     <meta property="og:type" content={type} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={url} />
     <meta property="og:site_name" content="toastin.it" />
+    <meta property="og:image" content={ogImage(image)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${title} — Daniel Różycki`} />
     {publishedAt && <meta property="article:published_time" content={publishedAt.toISOString()} />}
-    <meta name="twitter:card" content="summary" />
+    {updatedAt && <meta property="article:modified_time" content={updatedAt.toISOString()} />}
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage(image)} />
+    <meta name="twitter:image:alt" content={`${title} — Daniel Różycki`} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate" type="application/rss+xml" title="toastin.it RSS" href="/rss.xml" />
     <script
       is:inline
       type="application/ld+json"
-      set:html={JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'WebSite',
-        name: 'toastin.it',
-        url: 'https://toastin.it',
-        description,
-        author: { '@type': 'Person', name: 'Daniel Różycki', url: 'https://rozycki.dev' },
-        potentialAction: {
-          '@type': 'SearchAction',
-          target: 'https://toastin.it/search?q={search_term_string}',
-          'query-input': 'required name=search_term_string',
-        },
-      })}
+      set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })}
     />
     <script is:inline>
       const saved = localStorage.getItem('theme');
       const prefersDark = matchMedia('(prefers-color-scheme: dark)').matches;
-      document.documentElement.dataset.theme = saved || (prefersDark ? 'dark' : 'light');
+      const theme = saved || (prefersDark ? 'dark' : 'light');
+      document.documentElement.dataset.uiTheme = theme;
+      document.documentElement.dataset.theme =
+        theme === 'dark' ? 'github-dark-default' : 'github-light-default';
     </script>
     <title>{title}</title>
   </head>
@@ -59,9 +65,13 @@ const url = canonical ?? Astro.url.href;
     <Header />
     <main id="main-content"><slot /></main>
     <footer class="site-footer wrap">
-      <span>© {new Date().getFullYear()} Daniel Różycki</span><a href="/rss.xml">RSS</a><a
-        href="https://github.com/AlTosterino">GitHub</a
-      ><a href="https://rozycki.dev">rozycki.dev</a>
+      <div>
+        <strong>Daniel Różycki</strong><span>Software Architect and Senior Python Engineer</span>
+      </div><nav aria-label="Footer navigation">
+        <a href="/rss.xml">RSS</a><a href="https://github.com/AlTosterino">GitHub</a><a
+          href="https://rozycki.dev">rozycki.dev</a
+        ><a href="https://www.linkedin.com/in/daniel-rozycki/">LinkedIn</a>
+      </nav><small>© {new Date().getFullYear()}</small>
     </footer>
   </body>
 </html>

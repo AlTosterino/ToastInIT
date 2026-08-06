@@ -2,10 +2,20 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ArticleList from '../../components/ArticleList.astro';
 import { getArticles } from '../../lib/content';
+import { breadcrumbs } from '../../lib/site';
 const articles = await getArticles();
 ---
 
-<BaseLayout title="Articles — toastin.it" description="Technical writing by Daniel Różycki."
+<BaseLayout
+  title="Writing — Daniel Różycki"
+  description="Technical writing by Daniel Różycki on software architecture, Python systems, distributed workflows and applied AI."
+  canonical="/articles/"
+  jsonLd={[
+    breadcrumbs([
+      { name: 'Home', url: '/' },
+      { name: 'Writing', url: '/articles/' },
+    ]),
+  ]}
   ><div class="wrap page-intro">
     <p class="eyebrow">Archive</p><h1>Articles</h1><p class="lead">
       Notes on building dependable systems and the engineering work around them.

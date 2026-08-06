@@ -10,11 +10,14 @@ const { articles, empty = 'No public articles yet.' } = Astro.props as {
 {
   articles.length ? (
     <div class="article-list">
-      {articles.map((article) => (
+      {articles.map((article, index) => (
         <article class="article-row">
+          <span class="article-index" aria-hidden="true">
+            {String(index + 1).padStart(2, '0')}
+          </span>
           <div class="article-row-meta">
             <time datetime={article.data.publishedAt.toISOString()}>
-              {formatDate(article.data.publishedAt)}
+              {formatDate(article.data.publishedAt, article.data.language)}
             </time>
             <span>{readingTime(article.body)} min read</span>
           </div>

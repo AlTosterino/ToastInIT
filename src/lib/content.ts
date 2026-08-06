@@ -14,5 +14,5 @@ export const slugify = (value: string) =>
     .replace(/[\s-]+/g, '-');
 export const readingTime = (body = '') =>
   Math.max(1, Math.ceil(body.split(/\s+/).filter(Boolean).length / 220));
-export const formatDate = (date: Date) =>
-  new Intl.DateTimeFormat('en', { dateStyle: 'medium' }).format(date);
+export const formatDate = (date: Date, language = 'en') =>
+  new Intl.DateTimeFormat(language, { dateStyle: 'medium' }).format(date);
