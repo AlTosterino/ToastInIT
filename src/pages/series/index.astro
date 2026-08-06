@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getArticles, slugify } from '../../lib/content';
+const articles = await getArticles();
+const series = [
+  ...new Set(articles.flatMap((article) => (article.data.series ? [article.data.series] : []))),
+];
+---
+
+<BaseLayout title="Series — toastin.it"
+  ><div class="wrap page-intro">
+    <p class="eyebrow">Longer threads</p><h1>Series</h1><div class="topic-directory">
+      {
+        series.length ? (
+          series.map((name) => (
+            <a href={`/series/${slugify(name)}/`}>
+              <>
+                <span>{name}</span>
+                <small>{articles.filter((a) => a.data.series === name).length}</small>
+              </>
+            </a>
+          ))
+        ) : (
+          <p class="empty-state">Series will appear here when a public series is published.</p>
+        )
+      }
+    </div>
+  </div></BaseLayout
+>

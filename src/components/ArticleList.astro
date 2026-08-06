@@ -1,0 +1,41 @@
+---
+import type { Article } from '../lib/content';
+import { formatDate, readingTime } from '../lib/content';
+const { articles, empty = 'No public articles yet.' } = Astro.props as {
+  articles: Article[];
+  empty?: string;
+};
+---
+
+{
+  articles.length ? (
+    <div class="article-list">
+      {articles.map((article) => (
+        <article class="article-row">
+          <div class="article-row-meta">
+            <time datetime={article.data.publishedAt.toISOString()}>
+              {formatDate(article.data.publishedAt)}
+            </time>
+            <span>{readingTime(article.body)} min read</span>
+          </div>
+          <h2>
+            <a href={`/articles/${article.id}/`}>{article.data.title}</a>
+          </h2>
+          <p>{article.data.description}</p>
+          <div class="tag-list">
+            {article.data.tags.slice(0, 3).map((tag) => (
+              <a href={`/topics/${tag.toLowerCase().replaceAll(' ', '-')}/`}>#{tag}</a>
+            ))}
+          </div>
+        </article>
+      ))}
+    </div>
+  ) : (
+    <div class="empty-state">
+      <>
+        <p>{empty}</p>
+        <p>Daniel is preparing notes on architecture, Python and AI engineering.</p>
+      </>
+    </div>
+  )
+}

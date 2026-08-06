@@ -1,0 +1,67 @@
+---
+import Header from '../components/Header.astro';
+import '../styles/global.css';
+const {
+  title = 'Daniel Różycki — Software Architecture, Python & AI Engineering',
+  description = 'Software architecture, Python, distributed systems and AI engineering.',
+  canonical,
+  type = 'website',
+  publishedAt,
+} = Astro.props;
+const url = canonical ?? Astro.url.href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={url} />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={url} />
+    <meta property="og:site_name" content="toastin.it" />
+    {publishedAt && <meta property="article:published_time" content={publishedAt.toISOString()} />}
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title="toastin.it RSS" href="/rss.xml" />
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'toastin.it',
+        url: 'https://toastin.it',
+        description,
+        author: { '@type': 'Person', name: 'Daniel Różycki', url: 'https://rozycki.dev' },
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: 'https://toastin.it/search?q={search_term_string}',
+          'query-input': 'required name=search_term_string',
+        },
+      })}
+    />
+    <script is:inline>
+      const saved = localStorage.getItem('theme');
+      const prefersDark = matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.dataset.theme = saved || (prefersDark ? 'dark' : 'light');
+    </script>
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <Header />
+    <main id="main-content"><slot /></main>
+    <footer class="site-footer wrap">
+      <span>© {new Date().getFullYear()} Daniel Różycki</span><a href="/rss.xml">RSS</a><a
+        href="https://github.com/AlTosterino">GitHub</a
+      ><a href="https://rozycki.dev">rozycki.dev</a>
+    </footer>
+  </body>
+</html>

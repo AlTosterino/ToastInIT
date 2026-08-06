@@ -1,0 +1,12 @@
+---
+import type { Article } from '../lib/content';
+const { article } = Astro.props as { article: Article };
+---
+
+<article class="featured-card">
+  <p class="eyebrow">Featured</p><h2>
+    <a href={`/articles/${article.id}/`}>{article.data.title}</a>
+  </h2><p>{article.data.description}</p><a class="text-link" href={`/articles/${article.id}/`}
+    >Read article <span aria-hidden="true">→</span></a
+  >
+</article>

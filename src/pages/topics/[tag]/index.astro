@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ArticleList from '../../../components/ArticleList.astro';
+import { getArticles, slugify } from '../../../lib/content';
+export async function getStaticPaths() {
+  const articles = await getArticles();
+  const tags = [...new Set(articles.flatMap((article) => article.data.tags))];
+  return tags.map((tag) => ({
+    params: { tag: slugify(tag) },
+    props: { tag, articles: articles.filter((article) => article.data.tags.includes(tag)) },
+  }));
+}
+const { tag, articles } = Astro.props;
+---
+
+<BaseLayout title={`#${tag} — toastin.it`}
+  ><div class="wrap page-intro">
+    <p class="eyebrow">Topic</p><h1>#{tag}</h1><ArticleList articles={articles} />
+  </div></BaseLayout
+>
