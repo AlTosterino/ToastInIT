@@ -26,8 +26,57 @@ test('theme and keyboard search work', async ({ page }) => {
 test('article exposes reading progress and active table of contents', async ({ page }) => {
   await page.goto('/articles/architecting-ai-assisted-systems/');
   await expect(page.locator('[data-reading-progress]')).toContainText('min left');
+  await expect(page.locator('.article-meta')).not.toContainText('min read');
+  await expect(page.locator('.reading-status')).toContainText('min read');
+  await expect(
+    page.locator(
+      '[data-share-x], [data-share-mastodon], [data-share-linkedin], [data-copy-article]',
+    ),
+  ).toHaveCount(4);
+  await expect(page.locator('.mermaid svg')).toBeVisible();
+  await expect(page.locator('pre[data-language="mermaid"]')).toHaveCount(0);
   await page.locator('h2').nth(1).scrollIntoViewIfNeeded();
   await expect(page.locator('.toc a.is-active')).toBeVisible();
+});
+
+test('public pages expose canonical SEO metadata and structured data', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  await expect(page.locator('meta[name="description"]')).toHaveCount(1);
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    'href',
+    'https://toastin.it/',
+  );
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+    'content',
+    /\/og\/home\.png$/,
+  );
+
+  await page.goto('/articles/architecting-ai-assisted-systems/');
+  await expect(page.locator('h1')).toHaveCount(1);
+  await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
+    'content',
+    'summary_large_image',
+  );
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+    'content',
+    /architecting-ai-assisted-systems\.png$/,
+  );
+  const articleJsonLd = await page
+    .locator('script[type="application/ld+json"]')
+    .evaluate((script) => script.innerHTML);
+  expect(articleJsonLd).toContain('TechArticle');
+  expect(articleJsonLd).toContain('datePublished');
+
+  await page.goto('/about/');
+  const profileJsonLd = await page
+    .locator('script[type="application/ld+json"]')
+    .evaluate((script) => script.innerHTML);
+  expect(profileJsonLd).toContain('ProfilePage');
+  expect(profileJsonLd).toContain('Daniel Różycki');
+
+  await page.goto('/search/');
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
 });
 
 test('mobile navigation is keyboard and button accessible', async ({ page }) => {
