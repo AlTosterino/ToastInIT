@@ -1,0 +1,41 @@
+name: Temporary CI reproduction
+
+on:
+  push:
+    branches: [fix-ci-legal-pages]
+
+permissions:
+  contents: write
+
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Apply repository formatter
+        run: npm run format
+      - name: Run full verification and capture output
+        id: verify
+        shell: bash
+        run: |
+          set +e
+          npm run verify > ci-verify.log 2>&1
+          status=$?
+          echo "exit_code=$status" >> "$GITHUB_OUTPUT"
+          cat ci-verify.log
+          exit 0
+      - name: Commit formatter output and verification log
+        shell: bash
+        run: |
+          rm -f .github/workflows/ci-debug-fix.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Format legal pages and capture CI verification" || true
+          git push
