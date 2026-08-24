@@ -25,7 +25,18 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - run: npm run verify
+      - name: Check formatting
+        run: npm run format:check
+      - name: Run lint
+        run: npm run lint
+      - name: Run Astro check
+        run: npm run check
+      - name: Run tests
+        run: npm run test
+      - name: Build site
+        run: npm run build
+      - name: Build search index
+        run: npm run search:index
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
