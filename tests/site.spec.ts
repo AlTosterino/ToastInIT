@@ -47,6 +47,7 @@ test('public pages expose canonical SEO metadata and structured data', async ({ 
     'href',
     'https://toastin.it/',
   );
+  await expect(page.locator('link[rel="icon"]')).toHaveAttribute('href', '/favicon.svg');
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
     'content',
     /\/og\/home\.png$/,
@@ -77,6 +78,23 @@ test('public pages expose canonical SEO metadata and structured data', async ({ 
 
   await page.goto('/search/');
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
+});
+
+test('legal pages render and are linked from the footer', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('.site-footer a[href="/privacy/"]')).toHaveText('Privacy Policy');
+  await expect(page.locator('.site-footer a[href="/terms/"]')).toHaveText('Terms');
+
+  await page.goto('/privacy/');
+  await expect(page.locator('h1')).toHaveText('Privacy Policy');
+  await expect(page.locator('main')).toContainText('NIP: 7262679953');
+  await expect(page.locator('main')).toContainText('REGON: 385332519');
+  await expect(page.locator('main')).toContainText('localStorage');
+
+  await page.goto('/terms/');
+  await expect(page.locator('h1')).toHaveText('Terms of Use');
+  await expect(page.locator('main')).toContainText('NIP: 7262679953');
+  await expect(page.locator('a[href="/privacy/"]')).toHaveCount(2);
 });
 
 test('mobile navigation is keyboard and button accessible', async ({ page }) => {
