@@ -1,0 +1,115 @@
+
+> toastin-it@1.0.0 verify
+> npm run format:check && npm run lint && npm run check && npm run test && npm run build && npm run search:index
+
+
+> toastin-it@1.0.0 format:check
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> toastin-it@1.0.0 lint
+> eslint . && markdownlint-cli2 README.md 'docs/**/*.md' 'src/content/**/*.md'
+
+markdownlint-cli2 v0.18.1 (markdownlint v0.38.0)
+Finding: README.md docs/**/*.md src/content/**/*.md README.md docs/**/*.md src/content/**/*.md !node_modules/** !dist/**
+Linting: 4 file(s)
+Summary: 0 error(s)
+
+> toastin-it@1.0.0 check
+> astro check
+
+[2m18:40:05[22m [34m[content][39m Syncing content
+[2m18:40:05[22m [34m[content][39m Synced content
+[2m18:40:05[22m [34m[types][39m Generated [2m765ms[22m
+[2m18:40:05[22m [34m[check][39m Getting diagnostics for Astro files in /home/runner/work/ToastInIT/ToastInIT...
+Result (28 files): 
+- 0 errors
+- 0 warnings
+- 0 hints
+
+
+> toastin-it@1.0.0 test
+> playwright test
+
+
+Running 6 tests using 1 worker
+······
+  6 passed (8.1s)
+
+> toastin-it@1.0.0 build
+> astro build
+
+[2m18:40:20[22m [34m[content][39m Syncing content
+[2m18:40:20[22m [34m[content][39m Synced content
+[2m18:40:20[22m [34m[types][39m Generated [2m494ms[22m
+[2m18:40:20[22m [34m[build][39m output: [34m"static"[39m
+[2m18:40:20[22m [34m[build][39m mode: [34m"static"[39m
+[2m18:40:20[22m [34m[build][39m directory: [34m/home/runner/work/ToastInIT/ToastInIT/dist/[39m
+[2m18:40:20[22m [34m[build][39m Collecting build info...
+[2m18:40:20[22m [34m[build][39m [32m✓ Completed in 635ms.[39m
+[2m18:40:20[22m [34m[build][39m Building static entrypoints...
+[2m18:40:20[22m [34m[vite][39m [32m✓ built in 271ms[39m
+[33m[1m18:40:21[22m [WARN] [vite][39m [33m[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[2m18:40:21[22m [34m[vite][39m [32m✓ built in 910ms[39m
+[2m18:40:21[22m [34m[build][39m Rearranging server assets...
+
+[42m[30m generating static routes [39m[49m
+[2m18:40:21[22m   [34m├─[39m [2m/404.html[22m [2m(+12ms)[22m 
+[2m18:40:21[22m   [34m├─[39m [2m/about/index.html[22m [2m(+3ms)[22m 
+[2m18:40:21[22m   [34m├─[39m [2m/articles/index.html[22m [2m(+4ms)[22m 
+[2m18:40:21[22m   [34m├─[39m [2m/articles/architecting-ai-assisted-systems/index.html[22m [2m(+3ms)[22m 
+[2m18:40:21[22m   [34m├─[39m [2m/og/home.png[22m [2m(+36ms)[22m 
+[2m18:40:21[22m   [34m├─[39m [2m/og/about.png[22m [2m(+39ms)[22m 
+[2m18:40:21[22m   [34m├─[39m [2m/og/articles/architecting-ai-assisted-systems.png[22m [2m(+36ms)[22m 
+[2m18:40:21[22m   [34m├─[39m [2m/privacy/index.html[22m [2m(+3ms)[22m 
+[2m18:40:21[22m   [34m├─[39m [2m/rss.xml[22m [2m(+66ms)[22m 
+[2m18:40:21[22m   [34m├─[39m [2m/search/index.html[22m [2m(+2ms)[22m 
+[2m18:40:21[22m   [34m├─[39m [2m/series/ai-systems-in-practice/index.html[22m [2m(+2ms)[22m 
+[2m18:40:21[22m   [34m├─[39m [2m/series/index.html[22m [2m(+2ms)[22m 
+[2m18:40:21[22m   [34m├─[39m [2m/terms/index.html[22m [2m(+2ms)[22m 
+[2m18:40:21[22m   [34m├─[39m [2m/topics/ai-engineering/index.html[22m [2m(+2ms)[22m 
+[2m18:40:21[22m   [34m├─[39m [2m/topics/software-architecture/index.html[22m [2m(+1ms)[22m 
+[2m18:40:21[22m   [34m├─[39m [2m/topics/python/index.html[22m [2m(+1ms)[22m 
+[2m18:40:21[22m   [34m├─[39m [2m/topics/index.html[22m [2m(+2ms)[22m 
+[2m18:40:21[22m   [34m├─[39m [2m/index.html[22m [2m(+2ms)[22m 
+[2m18:40:21[22m [32m✓ Completed in 285ms.
+[39m
+[2m18:40:21[22m [34m[build][39m [32m✓ Completed in 1.50s.[39m
+[2m18:40:21[22m [34m[@astrojs/sitemap][39m `sitemap-index.xml` created at `dist`
+[2m18:40:21[22m [34m[build][39m 14 page(s) built in [1m2.16s[22m
+[2m18:40:21[22m [34m[build][39m [1mComplete![22m
+
+> toastin-it@1.0.0 search:index
+> pagefind --site dist
+
+
+Running Pagefind v1.5.2 (Extended)
+Running from: "/home/runner/work/ToastInIT/ToastInIT"
+Source:       "dist"
+Output:       "dist/pagefind"
+
+[Walking source directory]
+Found 14 files matching **/*.{html}
+
+[Parsing files]
+Found a data-pagefind-body element on the site.
+↳ Ignoring pages without this tag.
+
+[Reading languages]
+Discovered 1 language: en
+
+[Building search indexes]
+Total: 
+  Indexed 1 language
+  Indexed 1 page
+  Indexed 411 words
+  Indexed 0 filters
+  Indexed 0 sorts
+
+Finished in 0.016 seconds
